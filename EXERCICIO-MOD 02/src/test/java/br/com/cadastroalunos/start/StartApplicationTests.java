@@ -1,13 +1,13 @@
-package com.mentorama.excecoes;
+package br.com.cadastroalunos.start;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ExcecoesApplicationTests {
+class StartApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }
