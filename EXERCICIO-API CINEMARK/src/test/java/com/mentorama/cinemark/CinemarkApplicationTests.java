@@ -1,10 +1,10 @@
-package br.com.mentorama.aloMundo;
+package com.mentorama.cinemark;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AloMundoApplicationTests {
+class CinemarkApplicationTests {
 
 	@Test
 	void contextLoads() {
