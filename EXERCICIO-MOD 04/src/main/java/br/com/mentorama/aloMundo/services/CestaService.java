@@ -1,7 +1,8 @@
 package br.com.mentorama.aloMundo.services;
 
 
-import br.com.mentorama.aloMundo.entities.ProdutosSelecionados;
+import br.com.mentorama.aloMundo.entities.Cesta;
+import br.com.mentorama.aloMundo.entities.ItemCarrinho;
 import br.com.mentorama.aloMundo.entities.Produtos;
 import br.com.mentorama.aloMundo.repositories.ProdutosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +15,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 @Service
-public class CarrinhoService {
+public class CestaService {
 
     @Autowired
     private  ProdutosRepository produtosRepository;
+    @Autowired
+    private Cesta cesta;
 
-    public List<ProdutosSelecionados> listarCar() {
-        return produtosRepository.getSelectProd();
+    public Cesta listarCar() {
+        return this.produtosRepository.getCestaCompras();
     }
 
-    public List<ProdutosSelecionados> addProduto(@RequestBody Integer id) {
+    public List<ItemCarrinho> addProduto(@RequestBody Integer id) {
         Produtos produtos = produtosRepository.getProdutos().stream()
                 .filter(p -> p.getId().equals(id)).findFirst().get();
-        produtosRepository.setProdutosSelect(produtos);
-        return  produtosRepository.getSelectProd();
+        produtosRepository.setCestaCompras(produtos);
+        return  this.produtosRepository.getCestaCompras().getItemCarrinho();
     }
 
     public ResponseEntity deleteProduto(@PathVariable("id") Integer id) {
-        produtosRepository.deletCompras(id);
-        return  new ResponseEntity(produtosRepository.getSelectProd(),HttpStatus.OK);
+        produtosRepository.deletItem(id);
+        return  new ResponseEntity(listarCar(),HttpStatus.OK);
     }
     
 
