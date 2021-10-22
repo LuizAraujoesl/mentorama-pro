@@ -16,10 +16,7 @@ class ProdutosServiceTests {
 
 	@Autowired
 	ProdutosRepository produtosRepository;
-
-	double deconto;
-	double descountUm;
-	double descountDois;
+	double soma;
 
     Cesta cesta;
     ItensCesta itensCesta;
@@ -32,9 +29,6 @@ class ProdutosServiceTests {
 		this.itensCesta =  new ItensCesta();
 		this.produtos = new ProdutosRepository();
 		this.p = this.produtos.getProdutos();
-		this.deconto = this.produtos.getCestaCompras().getDescount();
-		this.descountUm = (this.cesta.getTotal() * 10.0) / 100;
-		this.descountDois = (this.cesta.getTotal() * 5.0) / 100;
 	}
 
 	@Test
@@ -77,6 +71,38 @@ class ProdutosServiceTests {
 		}
 	}
 
+	@Test
+	@DisplayName("5- Maior Desconto")
+	void verificMaiorDesc(){
+		Integer idProd = 3;
+		for (Produtos prod : p) {
+			if (idProd == prod.getId()){
+				itensCesta.setId(prod.getId());
+				itensCesta.setName(prod.getName());
+				itensCesta.setPrice(prod.getPrice());
+			}
+
+		}
+		this.cesta.setItemCarrinho(this.itensCesta);
+		// Faz soma dos so total da cesta
+		this.soma = this.cesta.getItemCarrinho().stream()
+				.mapToDouble(d -> d.getPrice()).sum();
+		cesta.setTotal(soma);
+
+		// Aplica  desconto maximo
+		if (soma > 500) {
+			cesta.setDescount((this.soma * 10.0) / 100);
+			cesta.setTotal(soma - cesta.getDescount());
+
+			// Aplica desconto minimo
+		} else if (soma < 500) {
+			cesta.setDescount((this.soma * 5.0) / 100);
+			cesta.setTotal(soma - cesta.getDescount());
+		}
+
+		Assertions.assertEquals(300, cesta.getDescount());
+	}
+
 
 
 	@Test
@@ -89,10 +115,26 @@ class ProdutosServiceTests {
 				itensCesta.setName(prod.getName());
 				itensCesta.setPrice(prod.getPrice());
 			}
+
 		}
 		this.cesta.setItemCarrinho(this.itensCesta);
-		Assertions.assertEquals(descountDois, cesta.getDescount());
-	}
+		// Faz soma dos so total da cesta
+		this.soma = this.cesta.getItemCarrinho().stream()
+				.mapToDouble(d -> d.getPrice()).sum();
+		cesta.setTotal(soma);
 
+		// Aplica  desconto maximo
+		if (soma > 500) {
+			cesta.setDescount((this.soma * 10.0) / 100);
+			cesta.setTotal(soma - cesta.getDescount());
+
+			// Aplica desconto minimo
+		} else if (soma < 500) {
+			cesta.setDescount((this.soma * 5.0) / 100);
+			cesta.setTotal(soma - cesta.getDescount());
+		}
+
+		Assertions.assertEquals(17.5, cesta.getDescount());
+	}
 
 }
