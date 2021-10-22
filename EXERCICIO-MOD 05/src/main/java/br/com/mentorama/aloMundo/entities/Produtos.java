@@ -18,6 +18,11 @@ public class Produtos {
         this.amount =  amount;
     }
 
+    // Construtor
+    public Produtos() {
+
+    }
+
     // Getters and Setters
     public Integer getId() {
         return id;

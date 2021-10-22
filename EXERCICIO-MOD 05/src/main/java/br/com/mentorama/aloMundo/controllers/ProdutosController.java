@@ -24,6 +24,12 @@ public class ProdutosController {
       return   new ResponseEntity(produtosService.findAll(), HttpStatus.OK);
     }
 
+    // listar produtos da loja por id
+    @GetMapping("/{id}")
+    public ResponseEntity<Produtos> listarProdutosPorId(@PathVariable("id") Integer id){
+        return   new ResponseEntity(produtosService.findById(id), HttpStatus.OK);
+    }
+
     // Adicionar produtos a loja
     @PostMapping("/add")
     public ResponseEntity<Produtos>addPRodutos(@RequestBody final Produtos produtos){
