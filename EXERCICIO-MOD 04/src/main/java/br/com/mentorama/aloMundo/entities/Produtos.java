@@ -1,12 +1,15 @@
 package br.com.mentorama.aloMundo.entities;
 
 public class Produtos {
+
+    // Atributos produtos
     private  Integer id;
     private String type;
     private String name;
     private double price;
     private int amount;
 
+    // Construtor
     public Produtos(Integer id, String type, String name, double price, int amount) {
         this.id = id;
         this.type = type;
@@ -15,21 +18,13 @@ public class Produtos {
         this.amount =  amount;
     }
 
-
+    // Getters and Setters
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getMenssagem() {
-        return name;
-    }
-
-    public void setMenssagem(String menssagem) {
-        this.name = menssagem;
     }
 
     public String getType() {

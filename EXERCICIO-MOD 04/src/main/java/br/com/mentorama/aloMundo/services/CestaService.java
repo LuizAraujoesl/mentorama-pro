@@ -2,7 +2,7 @@ package br.com.mentorama.aloMundo.services;
 
 
 import br.com.mentorama.aloMundo.entities.Cesta;
-import br.com.mentorama.aloMundo.entities.ItemCarrinho;
+import br.com.mentorama.aloMundo.entities.ItensCesta;
 import br.com.mentorama.aloMundo.entities.Produtos;
 import br.com.mentorama.aloMundo.repositories.ProdutosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +19,24 @@ public class CestaService {
 
     @Autowired
     private  ProdutosRepository produtosRepository;
-    @Autowired
-    private Cesta cesta;
 
-    public Cesta listarCar() {
+    // Lista Cesta de Compras
+    public Cesta listarCesta() {
         return this.produtosRepository.getCestaCompras();
     }
 
-    public List<ItemCarrinho> addProduto(@RequestBody Integer id) {
+    // Adiciona produtos a cesta
+    public List<ItensCesta> addProduto(@RequestBody Integer id) {
         Produtos produtos = produtosRepository.getProdutos().stream()
                 .filter(p -> p.getId().equals(id)).findFirst().get();
         produtosRepository.setCestaCompras(produtos);
         return  this.produtosRepository.getCestaCompras().getItemCarrinho();
     }
 
+    // Deleta produtos da Cesta
     public ResponseEntity deleteProduto(@PathVariable("id") Integer id) {
         produtosRepository.deletItem(id);
-        return  new ResponseEntity(listarCar(),HttpStatus.OK);
+        return  new ResponseEntity(listarCesta(),HttpStatus.OK);
     }
     
 

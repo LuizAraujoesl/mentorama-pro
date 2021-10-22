@@ -7,20 +7,24 @@ import java.util.List;
 
 @Component
 public class Cesta {
-    private List<ItemCarrinho> itemCarrinho;
+
+    //atributos cesta
+    private List<ItensCesta> itensCesta;
     private double descount;
     private double total;
 
+    // Construtor
     public Cesta(){
-        itemCarrinho =  new ArrayList<>();
+        itensCesta =  new ArrayList<>();
     }
 
-    public List<ItemCarrinho> getItemCarrinho() {
-        return itemCarrinho;
+    public List<ItensCesta> getItemCarrinho() {
+        return itensCesta;
     }
 
-    public void setItemCarrinho(ItemCarrinho itemCarrinho) {
-        this.itemCarrinho.add(itemCarrinho);
+    // Getter and Setters
+    public void setItemCarrinho(ItensCesta itensCesta) {
+        this.itensCesta.add(itensCesta);
     }
 
     public double getDescount() {

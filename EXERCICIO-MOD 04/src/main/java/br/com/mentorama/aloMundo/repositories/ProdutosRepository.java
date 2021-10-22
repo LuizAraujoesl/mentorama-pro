@@ -2,7 +2,7 @@ package br.com.mentorama.aloMundo.repositories;
 
 
 import br.com.mentorama.aloMundo.entities.Cesta;
-import br.com.mentorama.aloMundo.entities.ItemCarrinho;
+import br.com.mentorama.aloMundo.entities.ItensCesta;
 import br.com.mentorama.aloMundo.entities.Produtos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,7 +18,7 @@ public class ProdutosRepository {
     private List<Produtos> produtos;
     Cesta cestaCompras = new Cesta();
 
-
+    // Construtor
     public ProdutosRepository() {
         // add Produtos
         this.produtos = new ArrayList<>();
@@ -34,13 +34,14 @@ public class ProdutosRepository {
         produtos.add(sofa);
         produtos.add(hack);
         produtos.add(cozinha);
-
     }
 
+    // Buscando todos os produtos
     public List<Produtos> getProdutos() {
         return produtos;
     }
 
+    // Adicionando produtos
     public void setProdutos(Produtos produtos) {
         int i = 0;
         for (Produtos p : this.produtos) {
@@ -54,6 +55,7 @@ public class ProdutosRepository {
         }
     }
 
+    // Deletar produtos
     public void deletProdutos(Integer id) {
         int i = 0;
         for (Produtos p : this.produtos) {
@@ -65,50 +67,59 @@ public class ProdutosRepository {
         }
     }
 
-
+    // Adicionar produtos a cesta
     public void setCestaCompras(Produtos produtos) {
 
-        ItemCarrinho item = new ItemCarrinho();
-        boolean estoque;
+        // Cria uma instancia Cesta de compras
+        ItensCesta item = new ItensCesta();
+
+        /* Faz encapsulamento do que deve ser exibido */
         item.setId(produtos.getId());
         item.setName(produtos.getName());
         item.setPrice(produtos.getPrice());
 
+        // Percorre produtos para adicionar item a cesta
         for (Produtos p : this.produtos) {
+
+            // Verifica se itens sao iguais
             if (p.getName().equals(item.getName())) {
+
+                // Faz soma  dos produtos se houver estoque
                 if (p.getAmount() > 0) {
                     this.cesta.setItemCarrinho(item);
                     this.cestaCompras.setItemCarrinho(item);
+
+                    // Faz soma dos so total da cesta
                     double soma = this.cestaCompras.getItemCarrinho().stream()
                             .mapToDouble(d -> d.getPrice()).sum();
                     cestaCompras.setTotal(soma);
                     double descountUm = (cestaCompras.getTotal() * 10.0) / 100;
                     double descountDois = (cestaCompras.getTotal() * 5.0) / 100;
 
+                    // Aplica  desconto maximo
                     if (soma > 500) {
                         cestaCompras.setDescount(descountUm);
                         this.cesta.setTotal(soma - descountUm);
+
+                    // Aplica desconto minimo
                     } else if (soma < 500) {
                         cestaCompras.setDescount(descountDois);
                         cestaCompras.setTotal(soma - descountDois);
                     }
 
-
+                    // remove um produto do estoque
                     p.setAmount(p.getAmount() - 1);
                 }
                 System.out.println("****** Produto acabou *******");
                 break;
-
-
             }
-
         }
-
     }
 
+    // Deleta produo da cesta carrinho
     public void deletItem(Integer id) {
         int i = 0;
-        for (ItemCarrinho item : cestaCompras.getItemCarrinho()) {
+        for (ItensCesta item : cestaCompras.getItemCarrinho()) {
             if (item.getId().equals(id)) {
                 cestaCompras.getItemCarrinho().remove(i);
 
@@ -125,6 +136,7 @@ public class ProdutosRepository {
         }
     }
 
+    // Busca produtos da cesta
     public Cesta getCestaCompras() {
         return cestaCompras;
     }

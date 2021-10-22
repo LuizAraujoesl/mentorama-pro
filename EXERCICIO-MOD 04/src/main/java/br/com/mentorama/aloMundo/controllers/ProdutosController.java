@@ -18,22 +18,25 @@ public class ProdutosController {
     @Autowired
     private ProdutosService produtosService;
 
+    // listar produtos da loja
     @GetMapping("/produtos")
     public ResponseEntity<List<Produtos>> listarProdutos(){
       return   new ResponseEntity(produtosService.findAll(), HttpStatus.OK);
     }
 
-
+    // Adicionar produtos a loja
     @PostMapping("/add")
     public ResponseEntity<Produtos>addPRodutos(@RequestBody final Produtos produtos){
         return  new ResponseEntity(produtosService.addProduto(produtos), HttpStatus.CREATED);
     }
 
+    // Atualizar produtos na loja
     @PutMapping
     public ResponseEntity updateAtualizar(@RequestBody final Produtos produtos){
         return  new ResponseEntity(produtosService.updateProduto(produtos), HttpStatus.CREATED);
     }
 
+    // Deletar Produtos na loja
     @DeleteMapping("/{id}")
     public ResponseEntity deletarProdutos(@PathVariable("id") Integer id){
         return  new ResponseEntity(produtosService.deleteProduto(id), HttpStatus.OK);

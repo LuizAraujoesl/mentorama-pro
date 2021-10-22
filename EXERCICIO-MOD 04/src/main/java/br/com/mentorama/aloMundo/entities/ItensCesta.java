@@ -4,11 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ItemCarrinho {
+public class ItensCesta {
+
+    // Atribustos Intem cesta
     private  Integer id;
     private String name;
     private double price;
 
+    // Getter and Setters
     public Integer getId() {
         return id;
     }
@@ -25,9 +28,7 @@ public class ItemCarrinho {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
-    }
+    public double getPrice() {return price;}
 
     public void setPrice(double price) {
         this.price = price;
