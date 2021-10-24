@@ -4,11 +4,14 @@ package br.com.mentorama.aloMundo.repositories;
 import br.com.mentorama.aloMundo.entities.Cesta;
 import br.com.mentorama.aloMundo.entities.ItensCesta;
 import br.com.mentorama.aloMundo.entities.Produtos;
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Repository
 public class ProdutosRepository {
@@ -29,7 +32,7 @@ public class ProdutosRepository {
         produtos.add(foneOuvido);
         produtos.add(notebook);
         Produtos sofa = new Produtos(4, "moveis", "sofa_italia", 555.0, 2);
-        Produtos hack = new Produtos(5, "moveis", "hack_italia", 350.0, 1);
+        Produtos hack = new Produtos(5, "moveis", "hack_italia", 350.0, 0);
         Produtos cozinha = new Produtos(6, "moveis", "cozinha_italia", 1200.0, 3);
         produtos.add(sofa);
         produtos.add(hack);
@@ -93,24 +96,35 @@ public class ProdutosRepository {
                     double soma = this.cestaCompras.getItemCarrinho().stream()
                             .mapToDouble(d -> d.getPrice()).sum();
                     cestaCompras.setTotal(soma);
-                    double descountUm = (cestaCompras.getTotal() * 10.0) / 100;
-                    double descountDois = (cestaCompras.getTotal() * 5.0) / 100;
+                    double desDez = 10.0;
+                    double desCinco = 5.0;
+                    double descountUm = (cestaCompras.getTotal() * desDez) / 100;
+                    double descountDois = (cestaCompras.getTotal() * desCinco) / 100;
 
                     // Aplica  desconto maximo
                     if (soma > 500) {
-                        cestaCompras.setDescount(descountUm);
-                        this.cesta.setTotal(soma - descountUm);
+                        if(desDez <= 10){
+                            cestaCompras.setDescount(descountUm);
+                            this.cesta.setTotal(soma - descountUm);
+                        }else {
+                            Logger.getAnonymousLogger("Desconto maior que 10% nao e permitido");
+                        }
 
                     // Aplica desconto minimo
                     } else if (soma < 500) {
-                        cestaCompras.setDescount(descountDois);
-                        cestaCompras.setTotal(soma - descountDois);
+                        if(desCinco <= 5){
+                            cestaCompras.setDescount(descountDois);
+                            cestaCompras.setTotal(soma - descountDois);
+                        }else {
+                            Logger.getAnonymousLogger("Desconto maior que 5% nao e permitido");
+                        }
+
                     }
 
                     // remove um produto do estoque
                     p.setAmount(p.getAmount() - 1);
                 }
-                System.out.println("****** Produto acabou *******");
+
                 break;
             }
         }

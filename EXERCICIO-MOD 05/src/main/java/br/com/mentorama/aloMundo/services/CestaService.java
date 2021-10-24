@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class CestaService {
@@ -26,11 +27,17 @@ public class CestaService {
     }
 
     // Adiciona produtos a cesta
-    public List<ItensCesta> addProduto(@RequestBody Integer id) {
+    public ResponseEntity<Cesta> addProduto(@RequestBody Integer id) {
         Produtos produtos = produtosRepository.getProdutos().stream()
                 .filter(p -> p.getId().equals(id)).findFirst().get();
-        produtosRepository.setCestaCompras(produtos);
-        return  this.produtosRepository.getCestaCompras().getItemCarrinho();
+        if(produtos.getAmount() > 0){
+            produtosRepository.setCestaCompras(produtos);
+            return  ResponseEntity.status(HttpStatus.CREATED).body(this.produtosRepository.getCestaCompras());
+        }else {
+            System.out.println("Produto indisponivel ou sem estoque");
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(this.produtosRepository.getCestaCompras());
+
+        }
     }
 
     // Deleta produtos da Cesta
