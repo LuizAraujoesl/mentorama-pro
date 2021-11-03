@@ -39,8 +39,8 @@ public class TestesIntegracao {
 
 
     @Test
-    @DisplayName("Tente de Integracao")
-    public void shouldFindAllProducts() throws Exception{
+    @DisplayName("1-Testando Endpoint loja produtos")
+    public void lojaDeProducts(){
         wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/loja/produtos"))
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -48,8 +48,44 @@ public class TestesIntegracao {
                         .withBody(MOCKED_RESULT)));
     }
 
+    @Test
+    @DisplayName("2-Testando adicao de produtos na cesta")
+    public void cestaAddCompras(){
+        wireMockServer.stubFor(WireMock.post(WireMock.urlEqualTo("/loja/cesta"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(MOCKED_RESULT)));
+    }
+
+    @Test
+    @DisplayName("3-Testando lista de produtos na cesta")
+    public void cestaListCompras(){
+        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/loja/cesta"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(MOCKED_RESULT)));
+    }
+
+    @Test
+    @DisplayName("4-Testando delecao de produtos na cesta")
+    public void cestaDeleteCompras(){
+        wireMockServer.stubFor(WireMock.delete(WireMock.urlEqualTo("/loja/cesta"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(MOCKED_RESULT)));
+    }
+
+
+
+
     @AfterAll
     void staticAll(){
         wireMockServer.stop();
     }
+
+
+
 }

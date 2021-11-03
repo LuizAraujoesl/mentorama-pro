@@ -39,13 +39,13 @@ public class TestesUnitarios {
     }
 
     @Test
-    @DisplayName("1- Produtos nao Nulos")
+    @DisplayName("1- Testando se ha produtos no banco")
     void verificaProdutosNotNull(){
-        Assertions.assertNotNull(p, "Produto nao e Nulo");
+        Assertions.assertNotNull(p);
     }
 
     @Test
-    @DisplayName("2- Produtos Verificacao Valores")
+    @DisplayName("2- Testando se produto esta com valor correto ")
     void verificaValoresProdutos(){
         Double valor = 999.0;
         for (Produtos prod : p) {
@@ -56,7 +56,7 @@ public class TestesUnitarios {
     }
 
     @Test
-    @DisplayName("3- Produtos Verificacao Nomes")
+    @DisplayName("3- Veriricando nome dos produtos cadastrados")
     void verificaNomeProdutos(){
         String name = "celular_xiaomi";
         for (Produtos prod : p) {
@@ -67,7 +67,7 @@ public class TestesUnitarios {
     }
 
     @Test
-    @DisplayName("4- Produtos Verificacao Estoque")
+    @DisplayName("4- Verificacao de estoque se ha ou nao")
     void verificaEstoqueProdutos(){
         Integer estoque = 7;
         String name = "celular_xiaomi";
@@ -79,7 +79,7 @@ public class TestesUnitarios {
     }
 
     @Test
-    @DisplayName("5- Verificando desconto")
+    @DisplayName("5- Verificando se desconto esta sendo aplicado")
     void verificMaiorDesc(){
         Integer idProd = 3;
         for (Produtos prod : p) {
@@ -122,42 +122,8 @@ public class TestesUnitarios {
     }
 
 
-
     @Test
-    @DisplayName("6- Menor Desconto")
-    void verificMenorDesc(){
-        Integer idProd = 5;
-        for (Produtos prod : p) {
-            if (idProd == prod.getId()){
-                itensCesta.setId(prod.getId());
-                itensCesta.setName(prod.getName());
-                itensCesta.setPrice(prod.getPrice());
-            }
-
-        }
-        this.cesta.setItemCarrinho(this.itensCesta);
-        // Faz soma dos so total da cesta
-        this.soma = this.cesta.getItemCarrinho().stream()
-                .mapToDouble(d -> d.getPrice()).sum();
-        cesta.setTotal(soma);
-
-        // Aplica  desconto maximo
-        if (soma > 500) {
-            cesta.setDescount((this.soma * 10.0) / 100);
-            cesta.setTotal(soma - cesta.getDescount());
-
-            // Aplica desconto minimo
-        } else if (soma < 500) {
-            cesta.setDescount((this.soma * 5.0) / 100);
-            cesta.setTotal(soma - cesta.getDescount());
-        }
-
-        Assertions.assertEquals(17.5, cesta.getDescount());
-    }
-
-
-    @Test
-    @DisplayName("7- Verificando MSG produto sem estoque")
+    @DisplayName("6- Verifiando mensagem enviada ao usuario quando nao ha estoque")
     void verificaEstoqueProdutosMsg() {
         Integer idProd = 5;
             for (Produtos prod : p) {
@@ -169,5 +135,38 @@ public class TestesUnitarios {
                 }
             }
 
+    }
+
+    @Test
+    @DisplayName("7- Veriricando adicao de produtos a cesta de compras")
+    void verificaoCestaCompras(){
+        this.cestaService.addProduto(1);
+        this.cestaService.addProduto(2);
+        this.cestaService.addProduto(3);
+        System.out.println(this.cestaService.listarCesta());
+        System.out.println(this.cestaService.listarCesta().getItemCarrinho().size());
+        Assertions.assertEquals(3,this.cestaService.listarCesta().getItemCarrinho().size());
+        // remover produtos
+        // removendo para nao impactar em outro teste
+        this.cestaService.deleteProduto(1);
+        this.cestaService.deleteProduto(2);
+        this.cestaService.deleteProduto(3);
+    }
+
+    @Test
+    @DisplayName("8- Veriricando delecao de produtos a cesta de compras")
+    void verificaoCestaDeleteCompras(){
+        // add produtos
+        this.cestaService.addProduto(1);
+        this.cestaService.addProduto(2);
+
+        // remover produtos
+        this.cestaService.deleteProduto(1);
+        System.out.println(this.cestaService.listarCesta());
+        System.out.println(this.cestaService.listarCesta().getItemCarrinho().size());
+
+        Assertions.assertEquals(1,this.cestaService.listarCesta().getItemCarrinho().size());
+        // removendo para nao impactar em outro teste
+        this.cestaService.deleteProduto(2);
     }
 }

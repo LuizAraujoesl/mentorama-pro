@@ -42,4 +42,13 @@ public class Cesta {
     public void setTotal(double total) {
         this.total = total;
     }
+
+    @Override
+    public String toString() {
+        return "Cesta{" +
+                "itensCesta=" + itensCesta +
+                ", descount=" + descount +
+                ", total=" + total +
+                '}';
+    }
 }
