@@ -1,13 +1,14 @@
-package com.systemhospital.Service;
+package com.systemhospital.service;
 
 import com.systemhospital.core.GenericObjectMapper;
-import com.systemhospital.entities.GenericEntity_;
+import com.systemhospital.core.GenericEntity_;
 import com.systemhospital.entities.Historic;
 import com.systemhospital.entitiesDto.HistoricDto;
-import com.systemhospital.entitiesDto.PatientDto;
 import com.systemhospital.repository.HistoricRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,15 @@ public class HistoricService {
     @Autowired
     private HistoricRepository historicRepository;
 
-    public List<HistoricDto> historictFindAll(){
-        return this.mapper.mapListTo(this.historicRepository.findAll(), HistoricDto.class);
+    public List<HistoricDto> historictFindAll(Integer page, Integer pageSize){
+        return this.mapper.mapListTo(this.historicRepository.findAll(
+                PageRequest.of(page,pageSize, Sort.by("id")))
+                .stream().toList()
+                , HistoricDto.class);
     }
 
 
-    public HistoricDto historicFindById(Integer historicId){
+    public HistoricDto historicFindById(Long historicId){
         return this.mapper.mapTo(this.historicRepository.findById(historicId), HistoricDto.class);
     }
 
@@ -47,7 +51,7 @@ public class HistoricService {
                 this.mapper.mapTo(this.historicRepository.save(updateHistoric), HistoricDto.class));
     }
 
-    public void deletHistoric(Integer historicId){
+    public void deletHistoric(Long historicId){
         this.historicRepository.deleteById(historicId);
     }
 }

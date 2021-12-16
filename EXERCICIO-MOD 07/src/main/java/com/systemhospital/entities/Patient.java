@@ -1,26 +1,26 @@
 package com.systemhospital.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
-@Entity
+@EqualsAndHashCode
+@Entity(name = "patient")
 public class Patient implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "name_patient")
     private String name;
-
-    @Column(name = "gender_patient")
     private String gender;
-
-    @Column(name = "date_nasc_patient")
-    private LocalDateTime data;
+    private String phone;
+    private Date data;
 }

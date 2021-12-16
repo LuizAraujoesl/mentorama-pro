@@ -1,4 +1,4 @@
-package com.systemhospital.entities;
+package com.systemhospital.core;
 
 import com.systemhospital.core.GenericEntity;
 

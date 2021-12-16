@@ -1,6 +1,6 @@
 package com.systemhospital.resource;
 
-import com.systemhospital.Service.HistoricService;
+import com.systemhospital.service.HistoricService;
 import com.systemhospital.entitiesDto.HistoricDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,13 @@ public class HistoricResource {
     private HistoricService historicService;
 
     @GetMapping
-    public ResponseEntity<List<HistoricDto>> findall(){
-        return ResponseEntity.status(HttpStatus.OK).body(this.historicService.historictFindAll());
+    public ResponseEntity<List<HistoricDto>> findall(@RequestParam("page") Integer page,
+                                                     @RequestParam("pageSize") Integer pageSize){
+        return ResponseEntity.status(HttpStatus.OK).body(this.historicService.historictFindAll(page,pageSize));
     }
 
     @GetMapping(value = "/id")
-    public ResponseEntity<HistoricDto> findaById(@PathVariable Integer id ){
+    public ResponseEntity<HistoricDto> findaById(@PathVariable Long id ){
         return ResponseEntity.status(HttpStatus.OK).body(this.historicService.historicFindById(id));
     }
 
@@ -38,7 +39,7 @@ public class HistoricResource {
     }
 
     @DeleteMapping(value = "/id")
-    public ResponseEntity deleteHistoric(@PathVariable Integer id ){
+    public ResponseEntity deleteHistoric(@PathVariable Long id ){
         this.historicService.deletHistoric(id);
         return new ResponseEntity(HttpStatus.OK);
     }

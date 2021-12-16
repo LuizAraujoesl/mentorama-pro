@@ -1,7 +1,8 @@
 package com.systemhospital.resource;
 
 
-import com.systemhospital.Service.PatientService;
+import com.systemhospital.entities.Patient;
+import com.systemhospital.service.PatientService;
 import com.systemhospital.entitiesDto.PatientDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,12 @@ public class PatientResource {
     private PatientService patientService;
 
     @GetMapping
-    public ResponseEntity<List<PatientDto>> findall(){
-          return ResponseEntity.status(HttpStatus.OK).body(this.patientService.patientFindAll());
+    public ResponseEntity<List<PatientDto>> findall(@RequestParam("page") Integer page,
+                                                    @RequestParam("pageSize") Integer pageSize){
+          return ResponseEntity.status(HttpStatus.OK).body(this.patientService.patientFindAll(page, pageSize));
     }
 
-    @GetMapping(value = "/id")
+    @GetMapping("/{id}")
     public ResponseEntity<PatientDto> findaById(@PathVariable Integer id ){
         return ResponseEntity.status(HttpStatus.OK).body(this.patientService.patientFindById(id));
     }

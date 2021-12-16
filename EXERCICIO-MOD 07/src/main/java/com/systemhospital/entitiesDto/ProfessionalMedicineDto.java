@@ -1,8 +1,15 @@
 package com.systemhospital.entitiesDto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+
 @Data
-public class ProfissionalMedicineDto {
+@RequiredArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+public class ProfessionalMedicineDto {
 
     private Integer matricula;
     private String name;

@@ -1,17 +1,21 @@
 package com.systemhospital.core;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
     @Component
+    @Configuration
     public class GenericObjectMapper {
 
-        @Autowired
-        ModelMapper modelMapper;
+        @Bean
+        public ModelMapper modelMapper() {
+            return new ModelMapper();
+        }
 
         /**
          * Maps the source to destination class.
@@ -21,7 +25,7 @@ import java.util.stream.Collectors;
          * @return Instance of destination class.
          */
         public <S, D> D mapTo(S source, Class<D> destClass) {
-            return this.modelMapper.map(source, destClass);
+            return modelMapper().map(source, destClass);
         }
 
         /**
@@ -33,7 +37,7 @@ import java.util.stream.Collectors;
          */
         public <S, D> List<D> mapListTo(List<S> list, Class<D> destClass) {
             return list.stream()
-                    .map(s -> modelMapper.map(s, destClass))
+                    .map(s -> modelMapper().map(s, destClass))
                     .collect(Collectors.toList());
         }
 }
