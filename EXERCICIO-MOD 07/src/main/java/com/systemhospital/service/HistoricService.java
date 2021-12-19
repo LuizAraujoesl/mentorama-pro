@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HistoricService {
@@ -23,10 +24,10 @@ public class HistoricService {
     @Autowired
     private HistoricRepository historicRepository;
 
+
     public List<HistoricDto> historictFindAll(Integer page, Integer pageSize){
         return this.mapper.mapListTo(this.historicRepository.findAll(
-                PageRequest.of(page,pageSize, Sort.by("id")))
-                .stream().toList()
+                PageRequest.of(page,pageSize, Sort.by("id"))).toList()
                 , HistoricDto.class);
     }
 
