@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
@@ -17,27 +18,32 @@ public class ProfissionaisMedicineResource {
     @Autowired
     private ProfissionaisMedicineService profService;
 
+    @RolesAllowed("admin")
     @GetMapping
     public ResponseEntity<List<ProfessionalMedicineDto>> findall(@RequestParam("page") Integer page,
                                                                  @RequestParam("pageSize") Integer pageSize){
         return ResponseEntity.status(HttpStatus.OK).body(this.profService.profissionalFindAll(page, pageSize));
     }
 
+    @RolesAllowed("admin")
     @GetMapping(value = "/id")
     public ResponseEntity<ProfessionalMedicineDto> findaById(@PathVariable Integer id ){
         return ResponseEntity.status(HttpStatus.OK).body(this.profService.profissionalFindById(id));
     }
 
+    @RolesAllowed("admin")
     @PostMapping(value = "/new-profissional")
     public ResponseEntity<ProfessionalMedicineDto> saveProfissional(@RequestBody ProfessionalMedicineDto profissionalDto){
         return this.profService.saveProfissional(profissionalDto);
     }
 
+    @RolesAllowed("admin")
     @PutMapping( value = "/update-profissional", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProfessionalMedicineDto> updateProfissional(@RequestBody ProfessionalMedicineDto profissionalDto){
         return this.profService.saveProfissional(profissionalDto);
     }
 
+    @RolesAllowed("admin")
     @DeleteMapping(value = "/id")
     public ResponseEntity deleteProfissional(@PathVariable Integer id ){
         this.profService.deletProfissional(id);

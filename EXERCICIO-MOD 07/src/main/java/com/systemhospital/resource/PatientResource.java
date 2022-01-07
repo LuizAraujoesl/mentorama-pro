@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
@@ -19,27 +20,32 @@ public class PatientResource {
     @Autowired
     private PatientService patientService;
 
+    @RolesAllowed({"user", "admin"})
     @GetMapping
     public ResponseEntity<List<PatientDto>> findall(@RequestParam("page") Integer page,
                                                     @RequestParam("pageSize") Integer pageSize){
           return ResponseEntity.status(HttpStatus.OK).body(this.patientService.patientFindAll(page, pageSize));
     }
 
+    @RolesAllowed("admin")
     @GetMapping("/{id}")
     public ResponseEntity<PatientDto> findaById(@PathVariable Integer id ){
         return ResponseEntity.status(HttpStatus.OK).body(this.patientService.patientFindById(id));
     }
 
+    @RolesAllowed("admin")
     @PostMapping(value = "/new-patient")
     public ResponseEntity<PatientDto> savePatient(@RequestBody PatientDto patientDto){
         return this.patientService.savePatient(patientDto);
     }
 
+    @RolesAllowed("admin")
     @PutMapping( value = "/update-patient", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PatientDto> updatePatient(@RequestBody PatientDto patientDto){
         return this.patientService.savePatient(patientDto);
     }
 
+    @RolesAllowed("admin")
     @DeleteMapping(value = "/id")
     public ResponseEntity deleteHistoric(@PathVariable Integer id ){
         this.patientService.deletPatient(id);
