@@ -1,10 +1,10 @@
-package com.systemhospital;
+package com.mentorama;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SystenhospitalApplicationTests {
+class MentoramaApplicationTests {
 
 	@Test
 	void contextLoads() {

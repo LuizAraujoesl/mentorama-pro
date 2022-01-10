@@ -1,14 +1,14 @@
-package com.systemhospital;
+package com.mentorama;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class SystenhospitalApplication {
+public class MentoramaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SystenhospitalApplication.class, args);
+		SpringApplication.run(MentoramaApplication.class, args);
 	}
 
 }
