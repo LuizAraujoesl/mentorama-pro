@@ -33,6 +33,8 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+	implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.4.0'
 }
 
 
