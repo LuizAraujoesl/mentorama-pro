@@ -1,6 +1,5 @@
 package com.movies.controller;
 
-import com.movies.model.Movie;
 import com.movies.model.User;
 import com.movies.service.UserService;
 import org.slf4j.Logger;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -26,14 +24,14 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public Flux<List<User>> listAllUser(){
-        return this.userService.listAllUser().checkpoint();
+    public List<User> listAllUser(){
+        return this.userService.listAllUser();
     }
 
     @PostMapping("/new")
     public ResponseEntity addUser(@RequestBody User user){
-        LOGGER.info("Post-> user --> Menssagem enviada para Topc");
         jmsTemplate.convertAndSend("mailbox", user);
+        LOGGER.info("Post-> user --> Menssagem enviada para Topc");
         return ResponseEntity.ok().build();
     }
 

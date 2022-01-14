@@ -1,17 +1,20 @@
 package com.movies.service;
 
+import com.movies.config.JMSConfiguration;
 import com.movies.config.JmsErrorHandler;
 import com.movies.model.Movie;
 import com.movies.repository.MovieRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieService {
@@ -21,24 +24,24 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public Flux<List<Movie>> listAllMovies(){
-        return this.movieRepository.findAll().buffer();
+    public List<Movie> listAllMovies(){
+        return this.movieRepository.findAll();
     }
 
-    @JmsListener(destination = "topc.mailbox", concurrency = "jmsFactoryTopc")
+    @JmsListener(destination = "topc.mailbox", containerFactory = "topcListenerFactory")
     public void saveFilmeAndVote( Movie movie){
         LOGGER.info("Menssagem recebida salva com sucesso");
-        Movie search = this.movieRepository.findByUserId(movie.getId());
-        if(movie.getNameMovie().equals(search.getNameMovie())){
+        Optional<Movie> search = this.movieRepository.findById(movie.getId());
+        if(search.isEmpty()){
           new JmsErrorHandler();
         }else{
             this.movieRepository.save(movie);
         }
     }
 
-    @JmsListener(destination = "topc.mailbox", concurrency = "jmsFactoryTopc")
-    public Mono<Movie> deleteMovies(String name){
+    @JmsListener(destination = "topc.mailbox", containerFactory = "topcListenerFactory")
+    public void deleteMovies(String id){
         LOGGER.info("Menssagem recebida apagada com sucesso");
-        return this.movieRepository.deleteMovieByNameMovie(name).single();
+        this.movieRepository.deleteById(id);
     }
 }

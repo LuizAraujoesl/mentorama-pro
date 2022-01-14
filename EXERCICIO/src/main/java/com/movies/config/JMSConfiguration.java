@@ -1,4 +1,5 @@
 package com.movies.config;
+import org.apache.activemq.broker.BrokerService;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,18 +10,19 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
 import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
 
 @Configuration
 public class JMSConfiguration {
 
+
     @Bean
     public JmsListenerContainerFactory myFactory(ConnectionFactory connectionFactory,
                                                  DefaultJmsListenerContainerFactoryConfigurer configurer,
-                                                 JmsErrorHandler jmsErrorHandler) {
+                                                 JmsErrorHandler jmsErrorHandler){
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setErrorHandler(jmsErrorHandler);
         configurer.configure(factory, connectionFactory);
-        factory.setPubSubDomain(true);
         return factory;
     }
 

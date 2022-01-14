@@ -28,8 +28,8 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping
-    public Flux<List<Movie>> listAllMovies(){
-        return this.movieService.listAllMovies().checkpoint();
+    public List<Movie> listAllMovies(){
+        return this.movieService.listAllMovies();
     }
 
     @PostMapping("/new")
