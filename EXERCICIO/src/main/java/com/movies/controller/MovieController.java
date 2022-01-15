@@ -21,7 +21,6 @@ import java.util.List;
 @RequestMapping("/movie")
 public class MovieController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MovieController.class);
 
     @Autowired
     private JmsMessagingTemplate jmsTemplate;
@@ -38,15 +37,15 @@ public class MovieController {
     @PostMapping("/new")
     public ResponseEntity voteMovies(@RequestBody Movie movie){
         jmsTemplate.convertAndSend("saveTopc", movie);
-        LOGGER.info("Post-> movie --> Menssagem enviada para Topc");
+        System.out.println("Post->> Menssagem enviada Topc");
         return ResponseEntity.ok().build();
     }
 
     // Fica observando Queue pra Deletar Usuario
     @DeleteMapping("/delete")
     public ResponseEntity deleteMovies(@RequestBody  Movie movie){
-        jmsTemplate.convertAndSend("deleteMailbox", movie);
-        LOGGER.info("Delete-> movie --> Menssagem enviada para Topc");
+        jmsTemplate.convertAndSend("deleteTopc", movie);
+        System.out.println("Delete->> Menssagem enviada Topc");
         return ResponseEntity.ok().build();
     }
 }

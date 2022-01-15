@@ -31,13 +31,13 @@ public class UserController {
     @PostMapping("/new")
     public ResponseEntity addUser(@RequestBody User user){
         jmsTemplate.convertAndSend("saveMailbox", user);
-        LOGGER.info("Post-> user --> Menssagem enviada para Topc");
+        LOGGER.info("Post-> user --> Menssagem enviada para Queue");
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteUser(@RequestParam  User user){
-        LOGGER.info("Delete-> user --> Menssagem enviada para Topc");
+    public ResponseEntity deleteUser(@RequestBody  User user){
+        LOGGER.info("Delete-> user --> Menssagem enviada para Queue");
         jmsTemplate.convertAndSend("deleteMailbox", user);
         return ResponseEntity.ok().build();
     }

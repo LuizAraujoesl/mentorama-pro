@@ -18,7 +18,6 @@ import java.util.Optional;
 @Service
 public class MovieService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MovieService.class);
 
     @Autowired
     private MovieRepository movieRepository;
@@ -34,27 +33,31 @@ public class MovieService {
     // Fica observando Topcs pra Salvar Usuario
     @JmsListener(destination = "saveTopc", containerFactory = "topcListenerFactory")
     public void saveFilmeAndVote(Movie movie) {
-        User user = this.userRepository.findById(movie.getUserId().getId()).orElseThrow(
-                ()->  new RuntimeException("Usuario Nao encontrado")
-        );
-        LOGGER.info("Menssagem recebida salva com sucesso");
-        Movie search = this.movieRepository.findById(movie.getId()).orElseThrow(
-                ()-> new RuntimeException("Movie nao encontrado")
-        );
-        if (movie.getNameMovie().equals(search.getNameMovie())
-                && search.getUserId().getId().equals(movie.getUserId().getId())){
-            new JmsErrorHandler();
-        } else {
+        User user = this.userRepository.findById(movie.getUserId().getId()).get();
             movie.setUserId(user);
             movie.getNameMovie().toLowerCase(Locale.ROOT);
-            this.movieRepository.save(movie);
-        }
+            List<Movie> search =  listAllMovies();
+            if(!search.isEmpty()){
+              Movie m = this.movieRepository.findMovieByNameMovie(movie.getNameMovie());
+              if(m == null){
+                  this.movieRepository.save(movie);
+              }else if(m.getUserId().getId().equals(movie.getUserId().getId())){
+                  throw new RuntimeException("Usuario nao pode votar movie duas vezes");
+              }else{
+                  this.movieRepository.save(movie);
+              }
+            }
+            if(search.isEmpty()){
+                this.movieRepository.save(movie);
+            }
+
+        System.out.println("Menssagem recebida salva com sucesso");
     }
 
     // Fica observando Queue para Deletar
     @JmsListener(destination = "deleteTopc", containerFactory = "topcListenerFactory")
     public void deleteMovies(Movie movie) {
-        LOGGER.info("Menssagem recebida apagada com sucesso");
         this.movieRepository.deleteById(movie.getId());
+        System.out.println("Menssagem recebida Deletada com sucesso");
     }
 }

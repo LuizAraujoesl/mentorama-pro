@@ -8,4 +8,6 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface MovieRepository extends MongoRepository<Movie, String> {
+    Movie findMovieByNameMovie(String name);
 }
+
