@@ -1,6 +1,8 @@
 package com.movies.controller;
 
 import com.movies.model.Movie;
+import com.movies.model.User;
+import com.movies.repository.UserRepository;
 import com.movies.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,17 +34,19 @@ public class MovieController {
         return this.movieService.listAllMovies();
     }
 
+    // Fica observando Queue pra Salvar Usuario
     @PostMapping("/new")
     public ResponseEntity voteMovies(@RequestBody Movie movie){
+        jmsTemplate.convertAndSend("saveTopc", movie);
         LOGGER.info("Post-> movie --> Menssagem enviada para Topc");
-        jmsTemplate.convertAndSend("topc.mailbox", movie);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{name}")
-    public ResponseEntity deleteMovies(@RequestParam  String name){
-       LOGGER.info("Delete-> movie --> Menssagem enviada para Topc");
-        jmsTemplate.convertAndSend("topc.mailbox", name);
+    // Fica observando Queue pra Deletar Usuario
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteMovies(@RequestBody  Movie movie){
+        jmsTemplate.convertAndSend("deleteMailbox", movie);
+        LOGGER.info("Delete-> movie --> Menssagem enviada para Topc");
         return ResponseEntity.ok().build();
     }
 }

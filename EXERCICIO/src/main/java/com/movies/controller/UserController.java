@@ -30,15 +30,15 @@ public class UserController {
 
     @PostMapping("/new")
     public ResponseEntity addUser(@RequestBody User user){
-        jmsTemplate.convertAndSend("mailbox", user);
+        jmsTemplate.convertAndSend("saveMailbox", user);
         LOGGER.info("Post-> user --> Menssagem enviada para Topc");
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@RequestParam  String id){
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteUser(@RequestParam  User user){
         LOGGER.info("Delete-> user --> Menssagem enviada para Topc");
-        jmsTemplate.convertAndSend("mailbox", id);
+        jmsTemplate.convertAndSend("deleteMailbox", user);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,5 @@
 package com.movies.config;
-import org.apache.activemq.broker.BrokerService;
+
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,13 +10,12 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
 import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
 
 @Configuration
 public class JMSConfiguration {
 
 
-    @Bean
+    @Bean // Queues
     public JmsListenerContainerFactory myFactory(ConnectionFactory connectionFactory,
                                                  DefaultJmsListenerContainerFactoryConfigurer configurer,
                                                  JmsErrorHandler jmsErrorHandler){
@@ -26,7 +25,7 @@ public class JMSConfiguration {
         return factory;
     }
 
-    @Bean
+    @Bean // Topcs
     public JmsListenerContainerFactory topcListenerFactory(ConnectionFactory connectionFactory,
                                                            DefaultJmsListenerContainerFactoryConfigurer configurer) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
@@ -35,7 +34,7 @@ public class JMSConfiguration {
         return factory;
     }
 
-    @Bean
+    @Bean // Converter
     public MessageConverter jacksonJmsMsgConverter(){
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);

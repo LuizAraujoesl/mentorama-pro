@@ -26,15 +26,15 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    @JmsListener(destination = "mailbox", containerFactory = "myFactory")
+    @JmsListener(destination = "saveMailbox", containerFactory = "myFactory")
     public void saveUser( User user){
             this.userRepository.save(user);
         LOGGER.info("Save user -> Menssagem recebida salva com sucesso");
     }
 
-    @JmsListener(destination = "mailbox", containerFactory = "myFactory")
-    public void deleteMovies(String id){
-        this.userRepository.deleteById(id);
+    @JmsListener(destination = "deleteMailbox", containerFactory = "myFactory")
+    public void deleteMovies(User user){
+        this.userRepository.deleteById(user.getId());
         LOGGER.info("Delete user -> Menssagem recebida apagada com sucesso");
     }
 }
